@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+:root {
+  /* Industrial Chic Palette */
+  --color-charcoal: #1A1A1A;
+  --color-detroit-orange: #D35400; /* Brick/Industrial Orange */
+  --color-steel-gray: #7F8C8D;
+  --color-off-white: #F5F5F5;
+  
+  --background: #F5F5F5;
+  --foreground: #1A1A1A;
+  
+  --primary: #D35400;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #E5E5E5;
+  --muted-foreground: #7F8C8D;
+  
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  
+  --border: #E5E5E5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-border: var(--border);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0A0A0A;
+    --foreground: #EDEDED;
+    
+    --primary: #E67E22; /* Slightly brighter orange for dark mode */
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #2C2C2C;
+    --secondary-foreground: #FFFFFF;
+    
+    --muted: #262626;
+    --muted-foreground: #A3A3A3;
+    
+    --card: #171717;
+    --card-foreground: #EDEDED;
+    
+    --border: #262626;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
