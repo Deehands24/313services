@@ -25,7 +25,9 @@ export function Header() {
                 </nav>
                 <div className="flex items-center space-x-4">
                     <Button variant="outline" className="hidden sm:flex border-primary text-primary hover:bg-primary hover:text-white">List Your Business</Button>
-                    <Button>Find a Pro</Button>
+                    <Link href="/#lead-capture">
+                        <Button>Find a Pro</Button>
+                    </Link>
                 </div>
             </div>
         </header>
