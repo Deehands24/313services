@@ -10,7 +10,7 @@ export interface Listing {
     zip: string;
     description: string;
     isVerified: boolean;
-    isPremium: boolean;
+    tier: 'free' | 'pro' | 'premier';
     rating: number;
     reviewCount: number;
     imageUrl?: string;
@@ -29,7 +29,7 @@ export const listings: Listing[] = [
         zip: "48201",
         description: "Detroit's most trusted emergency plumbers. Available 24/7 for all your pipe and drain needs.",
         isVerified: true,
-        isPremium: true,
+        tier: 'premier',
         rating: 4.9,
         reviewCount: 124,
     },
@@ -44,7 +44,7 @@ export const listings: Listing[] = [
         zip: "48207",
         description: "Licensed and insured electricians serving the entire metro area. Residential and commercial.",
         isVerified: true,
-        isPremium: true,
+        tier: 'premier',
         rating: 4.8,
         reviewCount: 89,
     },
@@ -60,7 +60,7 @@ export const listings: Listing[] = [
         zip: "48226",
         description: "Experienced attorneys fighting for your rights. Specializing in family law and criminal defense.",
         isVerified: true,
-        isPremium: false,
+        tier: 'pro',
         rating: 4.7,
         reviewCount: 56,
     },
@@ -76,7 +76,7 @@ export const listings: Listing[] = [
         zip: "48216",
         description: "Full-service design and marketing agency located in the heart of Corktown.",
         isVerified: true,
-        isPremium: false,
+        tier: 'pro',
         rating: 5.0,
         reviewCount: 32,
     },
@@ -91,7 +91,7 @@ export const listings: Listing[] = [
         zip: "48201",
         description: "Honest and reliable auto repair. We fix it right the first time.",
         isVerified: false,
-        isPremium: false,
+        tier: 'free',
         rating: 4.5,
         reviewCount: 210,
     },
@@ -105,7 +105,7 @@ export const listings: Listing[] = [
         zip: "48207",
         description: "Transforming your outdoor space into a beautiful oasis. Lawn care, hardscaping, and more.",
         isVerified: true,
-        isPremium: false,
+        tier: 'free',
         rating: 4.6,
         reviewCount: 45,
     }

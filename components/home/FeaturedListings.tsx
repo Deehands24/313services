@@ -1,11 +1,16 @@
+"use client";
+
 import { listings } from "@/data/listings";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, Phone, MapPin, CheckCircle, ArrowRight } from "lucide-react";
+import { QuoteModal } from "@/components/listings/QuoteModal";
+import { useState } from "react";
 
 export function FeaturedListings() {
-    const featured = listings.filter(l => l.isPremium);
+    const featured = listings.filter(l => l.tier === 'premier');
+    const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null);
 
     return (
         <section className="py-20 bg-secondary/5">
@@ -64,12 +69,23 @@ export function FeaturedListings() {
                                 </div>
                             </CardContent>
                             <CardFooter className="pt-2">
-                                <Button className="w-full font-bold uppercase tracking-wide">Request Quote</Button>
+                                <Button
+                                    onClick={() => setSelectedBusiness(listing.businessName)}
+                                    className="w-full font-bold uppercase tracking-wide"
+                                >
+                                    Request Quote
+                                </Button>
                             </CardFooter>
                         </Card>
                     ))}
                 </div>
             </div>
+
+            <QuoteModal
+                businessName={selectedBusiness || ""}
+                isOpen={!!selectedBusiness}
+                onClose={() => setSelectedBusiness(null)}
+            />
         </section>
     );
 }

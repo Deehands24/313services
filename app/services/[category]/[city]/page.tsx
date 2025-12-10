@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { listings, categories } from "@/data/listings";
@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, Star, CheckCircle } from "lucide-react";
+import { QuoteModal } from "@/components/listings/QuoteModal";
+import { useState, use } from "react";
+import { notFound } from "next/navigation";
 
 interface Props {
     params: Promise<{
@@ -15,21 +18,10 @@ interface Props {
     }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { category: categoryId, city } = await params;
-    const category = categories.find(c => c.id === categoryId);
-    const cityName = city.charAt(0).toUpperCase() + city.slice(1);
+export default function ServicePage({ params }: Props) {
+    const { category: categoryId, city } = use(params);
+    const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null);
 
-    if (!category) return { title: "Not Found" };
-
-    return {
-        title: `Best ${category.name} in ${cityName} | 313.services`,
-        description: `Find top-rated ${category.name} services in ${cityName}. Verified local professionals in the 313 area code.`,
-    };
-}
-
-export default async function ServicePage({ params }: Props) {
-    const { category: categoryId, city } = await params;
     const category = categories.find(c => c.id === categoryId);
     if (!category) notFound();
 
@@ -38,27 +30,6 @@ export default async function ServicePage({ params }: Props) {
     const cityListings = listings.filter(
         l => l.category === categoryId && l.city.toLowerCase() === city.toLowerCase()
     );
-
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "itemListElement": cityListings.map((listing, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "item": {
-                "@type": "LocalBusiness",
-                "name": listing.businessName,
-                "telephone": listing.phone,
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": listing.address,
-                    "addressLocality": listing.city,
-                    "postalCode": listing.zip,
-                    "addressRegion": "MI"
-                }
-            }
-        }))
-    };
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -78,7 +49,7 @@ export default async function ServicePage({ params }: Props) {
                 <div className="container mx-auto px-4 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {cityListings.map((listing) => (
-                            <Card key={listing.id} className="hover:shadow-lg transition-shadow border-primary/10">
+                            <Card key={listing.id} className="hover:shadow-lg transition-shadow border-primary/10 flex flex-col">
                                 <CardHeader>
                                     <div className="flex justify-between items-start gap-4">
                                         <CardTitle className="text-xl font-bold">{listing.businessName}</CardTitle>
@@ -99,7 +70,7 @@ export default async function ServicePage({ params }: Props) {
                                         <span>{listing.reviewCount} reviews</span>
                                     </CardDescription>
                                 </CardHeader>
-                                <CardContent>
+                                <CardContent className="flex-1">
                                     <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{listing.description}</p>
                                     <div className="space-y-2 text-sm">
                                         <div className="flex items-center text-muted-foreground">
@@ -111,7 +82,18 @@ export default async function ServicePage({ params }: Props) {
                                     </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button className="w-full">Request Quote</Button>
+                                    {listing.tier === 'premier' ? (
+                                        <Button
+                                            onClick={() => setSelectedBusiness(listing.businessName)}
+                                            className="w-full font-bold uppercase"
+                                        >
+                                            Request Quote
+                                        </Button>
+                                    ) : (
+                                        <Button variant="outline" className="w-full" disabled>
+                                            Call for Quote
+                                        </Button>
+                                    )}
                                 </CardFooter>
                             </Card>
                         ))}
@@ -127,9 +109,11 @@ export default async function ServicePage({ params }: Props) {
                 </div>
             </main>
             <Footer />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+
+            <QuoteModal
+                businessName={selectedBusiness || ""}
+                isOpen={!!selectedBusiness}
+                onClose={() => setSelectedBusiness(null)}
             />
         </div>
     );
